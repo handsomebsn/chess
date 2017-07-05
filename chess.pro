@@ -24,6 +24,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        game.cpp
+        game.cpp \
+    stone.cpp \
+    board.cpp
 
-HEADERS  += game.h
+HEADERS  += game.h \
+    stone.h \
+    board.h
+
+RESOURCES += \
+    chessrs.qrc
