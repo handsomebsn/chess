@@ -40,6 +40,7 @@ Board::Board(QWidget *parent) : QWidget(parent),painter(this)
     stones[30].init(BING,6,6,redbool);
     stones[31].init(BING,6,8,redbool);
     setMinimumSize(520,576);
+    setMaximumSize(520,576);
 }
 /*绘图里面根据属性值来绘图，而不改变属性值本身，即视图层不参与逻辑运算，让代码条理更清晰*/
 void Board::paintEvent(QPaintEvent *event){
