@@ -20,7 +20,7 @@ int Stone::offx=36;
 int Stone::offy=36;
 Stone::Stone()
 {
-
+ liang=false;
 }
 Stone::Stone(TYPE _type, int _row, int _col, bool _color, bool _dead)
 {
@@ -30,6 +30,7 @@ Stone::Stone(TYPE _type, int _row, int _col, bool _color, bool _dead)
     col=_col;
     color=_color;
     dead=_dead;
+    liang=false;
 
 }
 QString Stone::name(){
@@ -122,6 +123,13 @@ void Stone::display(QPainter &painter){
           painter.drawImage(rect,QImage(":/images/bxiang.png"));
            break;
        }
+   if(liang==true)
+       painter.drawText(rect,"lightlight");
 
 }
 
+void Stone::gaoliang(bool _liang){
+
+    liang=_liang;
+
+}

@@ -14,6 +14,7 @@ public:
     QString name();
     friend class Board;
 protected:
+    bool liang;
     int row;//棋子所在的行
     int col;//棋子所在的列
     //是否死棋
@@ -26,6 +27,8 @@ protected:
     void init(TYPE _type,int _row,int _col,bool _color=true,bool _dead=false);
     //
     void display(QPainter &painter);
+    //
+    void gaoliang(bool _liang);
 
 /////////////////////////////
 

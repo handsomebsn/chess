@@ -1,4 +1,4 @@
-#include "board.h"
+﻿#include "board.h"
 #define getstoneId(_row,_col) postoids[_row][_col]
 #define samecolor(c1,c2) c1==c2
 #define decolor(c1,c2) c1!=c2
@@ -291,6 +291,9 @@ bool Board::canmove(int moveId, int rowto, int colto){
    case CHE:
        steps=chesteps(moveId);
        break;
+   case PAO:
+       steps=paosteps(moveId);
+       break;
    default:
        break;
    }
@@ -321,7 +324,10 @@ if(moveid==-1){
 //
  qDebug("frow %d %d",row,col);
  moveid=getstoneId(row,col);
+ if(moveid!=-1)
+stones[moveid].gaoliang(true);
 }else{
+
     row=(event->y()-Stone::offy+Stone::jiange/2)/Stone::jiange;
    col=(event->x()-Stone::offx+Stone::jiange/2)/Stone::jiange;
   //
@@ -329,12 +335,15 @@ if(moveid==-1){
    killedid=getstoneId(row,col);
    qDebug(" moveid  %d killedid %d",moveid,killedid);
    if(killedid!=-1&&samecolor(stones[killedid].color,stones[moveid].color))
-    {moveid=killedid;return;}
+    {stones[moveid].gaoliang(false);moveid=killedid;stones[moveid].gaoliang(true);update();return;}
    qDebug("haha");
    if(canmove(moveid,row,col))
    {
   move(moveid,row,col);
-  moveid=-1;}
+  stones[moveid].gaoliang(false);
+  moveid=-1;
+
+   }
 }
 update();
 }
