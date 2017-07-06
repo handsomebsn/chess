@@ -3,6 +3,7 @@
 #include <QWidget>
 #include<QPainter>
 #include<QVector>
+#include<QMouseEvent>
 #include"stone.h"
 #include"step.h"
 class Board : public QWidget
@@ -25,10 +26,13 @@ public:
     QVector<Step> bingteps(int moveId);
     ///////////////////////////////////
      void move(int moveId,int rowto,int colto);
+     //
+     bool canmove(int moveId,int rowto,int colto);
 signals:
 
 public slots:
     void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 };
 
 #endif // BOARD_H

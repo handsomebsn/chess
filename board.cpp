@@ -282,7 +282,21 @@ QVector<Step> Board::paosteps(int moveId){
 return steps;
 }
 
+bool Board::canmove(int moveId, int rowto, int colto){
+  if(moveId<0||moveId>31)
+     return false;
+   TYPE _type=stones[moveId].type;
+   QVector<Step> steps;
+   switch (_type) {
+   case CHE:
+       steps=chesteps(moveId);
+       break;
+   default:
+       break;
+   }
 
+return steps.contains(Step(moveId,getstoneId(rowto,colto),stones[moveId].row,stones[moveId].col,rowto,colto));
+}
 
 
 void Board::move(int moveId, int rowto, int colto){
@@ -294,3 +308,34 @@ void Board::move(int moveId, int rowto, int colto){
 
     postoids[rowto][colto]=moveId;
 }
+
+void Board::mousePressEvent(QMouseEvent *event){
+
+//qDebug("haha");
+    static int moveid=-1;
+    int killedid=-1;
+    int row,col;
+if(moveid==-1){
+  row=(event->y()-Stone::offy+Stone::jiange/2)/Stone::jiange;
+ col=(event->x()-Stone::offx+Stone::jiange/2)/Stone::jiange;
+//
+ qDebug("frow %d %d",row,col);
+ moveid=getstoneId(row,col);
+}else{
+    row=(event->y()-Stone::offy+Stone::jiange/2)/Stone::jiange;
+   col=(event->x()-Stone::offx+Stone::jiange/2)/Stone::jiange;
+  //
+   qDebug("to %d %d",row,col);
+   killedid=getstoneId(row,col);
+   qDebug(" moveid  %d killedid %d",moveid,killedid);
+   if(killedid!=-1&&samecolor(stones[killedid].color,stones[moveid].color))
+    {moveid=killedid;return;}
+   qDebug("haha");
+   if(canmove(moveid,row,col))
+   {
+  move(moveid,row,col);
+  moveid=-1;}
+}
+update();
+}
+

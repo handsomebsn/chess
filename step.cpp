@@ -13,3 +13,10 @@ Step::Step(int _moveId, int _killId, int _rowFrom, int _colFrom, int _rowTo, int
     colTo=_colTo;
 
 }
+
+bool Step::operator ==(const Step &step)const{
+
+
+
+return moveId==step.moveId&&killId==step.killId&&rowFrom==step.rowFrom&&colFrom==step.colFrom&&rowTo==step.rowTo&&colTo==step.colTo;
+}

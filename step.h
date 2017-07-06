@@ -17,6 +17,7 @@ public:
     //终点
     int rowTo;
     int colTo;
+    bool operator==(const Step &step)const;
 };
 
 #endif // STEP_H
