@@ -22,13 +22,13 @@ Stone::Stone()
 {
 
 }
-Stone::Stone(TYPE _type, int _row, int _col, bool _red, bool _dead)
+Stone::Stone(TYPE _type, int _row, int _col, bool _color, bool _dead)
 {
 
     type=_type;
     row=_row;
     col=_col;
-    red=_red;
+    color=_color;
     dead=_dead;
 
 }
@@ -52,11 +52,11 @@ QString Stone::name(){
     }
     return "错误";
 }
-void Stone::init(TYPE _type, int _row, int _col, bool _red, bool _dead){
+void Stone::init(TYPE _type, int _row, int _col, bool _color, bool _dead){
     type=_type;
     row=_row;
     col=_col;
-    red=_red;
+    color=_color;
     dead=_dead;
 }
 
@@ -70,7 +70,7 @@ void Stone::display(QPainter &painter){
     //根据中心点位置算出棋子矩形范围
     QRect rect(x-r,y-r,2*r,2*r);
 
-   if(this->red)
+   if(this->color)
        switch(this->type)
        {
        case CHE:

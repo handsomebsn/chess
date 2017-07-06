@@ -18,12 +18,12 @@ protected:
     int col;//棋子所在的列
     //是否死棋
     bool dead;
-    //是否红方
-    bool red;
+    //棋子颜色
+    bool color;//true 为红色 false为黑色
     //棋子名称
     TYPE type;
     //
-    void init(TYPE _type,int _row,int _col,bool _red=true,bool _dead=false);
+    void init(TYPE _type,int _row,int _col,bool _color=true,bool _dead=false);
     //
     void display(QPainter &painter);
 
