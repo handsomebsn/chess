@@ -62,24 +62,24 @@ void Board::paintEvent(QPaintEvent *event){
         stones[i].display(painter);
     painter.end();
 }
+
+
 QVector<Step> Board::chesteps(int moveId){
     QVector<Step> steps;
     int row=stones[moveId].row;
     int col=stones[moveId].col;
-    //qDebug("%d %d %d",row,col,getstoneId(row,col));
      /////////////////////////////在列上蛮力探索///////////////////////////////////////
     for(row++;row<10;row++)
     if(getstoneId(row,col)==-1)
-    {//qDebug("aaf");
+    {
      steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
     }
     else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
     {
-        //qDebug("%d %d %d",row,col,getstoneId(row,col));
+
      break;
     }else{
 
-       // qDebug("aaf");
      steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
      break;
     }
@@ -125,24 +125,172 @@ QVector<Step> Board::chesteps(int moveId){
      steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
      break;
     }
-    //col=stones[moveId].col;
-  //qDebug("%d",steps.count());
+
   return steps;
+}
+
+
+void Board::chesteps(int moveId, QVector<Step> &steps){
+    int row=stones[moveId].row;
+    int col=stones[moveId].col;
+    //qDebug("%d %d %d",row,col,getstoneId(row,col));
+     /////////////////////////////在列上蛮力探索///////////////////////////////////////
+    for(row++;row<10;row++)
+    if(getstoneId(row,col)==-1)
+    {
+     steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+    }
+    else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+    {
+
+     break;
+    }else{
+
+     steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+     break;
+    }
+    row=stones[moveId].row;
+    //
+    for(row--;row>=0;row--)
+    if(getstoneId(row,col)==-1)
+    {
+     steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+    }
+    else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+    {
+     break;
+    }else{
+     steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+     break;
+    }
+    row=stones[moveId].row;
+   //////////////////////////////////////在行上蛮力探索//////////////////////////////////////////////////////////////
+    for(col++;col<9;col++)
+    if(getstoneId(row,col)==-1)
+    {
+     steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+    }
+    else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+    {
+     break;
+    }else{
+     steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+     break;
+    }
+    col=stones[moveId].col;
+    //
+    for(col--;col>=0;col--)
+    if(getstoneId(row,col)==-1)
+    {
+     steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+    }
+    else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+    {
+     break;
+    }else{
+     steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+     break;
+    }
+}
+
+
+
+QVector<Step> Board::paosteps(int moveId){
+    QVector<Step> steps;
+    int row=stones[moveId].row;
+    int col=stones[moveId].col;
+    int numinline=0;
+    //qDebug("%d %d %d",row,col,getstoneId(row,col));
+     /////////////////////////////在列上蛮力探索///////////////////////////////////////
+    for(row++;row<10;row++)
+      if(numinline==0){
+           if(getstoneId(row,col)==-1)
+                 steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+               else
+                  numinline++;
+
+      }else{
+              if(getstoneId(row,col)==-1)
+                   continue;
+              else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+                      break;
+              else
+                 {steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+                  break;
+                 }
+      }
+    row=stones[moveId].row;
+    numinline=0;
+    for(row--;row>=0;row--)
+      if(numinline==0){
+           if(getstoneId(row,col)==-1)
+                 steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+               else
+                  numinline++;
+
+      }else{
+              if(getstoneId(row,col)==-1)
+                   continue;
+              else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+                      break;
+              else
+                 {steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+                  break;
+                 }
+      }
+      row=stones[moveId].row;
+      numinline=0;
+      //////////////////////////////////////在行上蛮力探索//////////////////////////////////////////////////////////////
+      for(col++;col<9;col++)
+        if(numinline==0){
+             if(getstoneId(row,col)==-1)
+                   steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+                 else
+                    numinline++;
+
+        }else{
+                if(getstoneId(row,col)==-1)
+                     continue;
+                else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+                        break;
+                else
+                   {steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+                    break;
+                   }
+        }
+      col=stones[moveId].col;
+      numinline=0;
+      for(col--;col>=0;col--)
+        if(numinline==0){
+             if(getstoneId(row,col)==-1)
+                   steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+                 else
+                    numinline++;
+
+        }else{
+                if(getstoneId(row,col)==-1)
+                     continue;
+                else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+                        break;
+                else
+                   {steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+                    break;
+                   }
+        }
+      //col=stones[moveId].col;
+      //numinline=0;
+return steps;
 }
 
 
 
 
-
-
-
-
 void Board::move(int moveId, int rowto, int colto){
-
+    postoids[stones[moveId].row][stones[moveId].col]=-1;
     stones[moveId].row=rowto;
     stones[moveId].col=colto;
     if(getstoneId(rowto,colto)!=-1)
        stones[getstoneId(rowto,colto)].dead=true;
-    postoids[stones[moveId].row][stones[moveId].col]=-1;
+
     postoids[rowto][colto]=moveId;
 }
