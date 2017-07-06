@@ -66,32 +66,69 @@ QVector<Step> Board::chesteps(int moveId){
     QVector<Step> steps;
     int row=stones[moveId].row;
     int col=stones[moveId].col;
-     //
-    for(;row<10;row++)
+    //qDebug("%d %d %d",row,col,getstoneId(row,col));
+     /////////////////////////////在列上蛮力探索///////////////////////////////////////
+    for(row++;row<10;row++)
     if(getstoneId(row,col)==-1)
-    {
-     steps.append(Step());
+    {//qDebug("aaf");
+     steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
     }
     else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
     {
+        //qDebug("%d %d %d",row,col,getstoneId(row,col));
      break;
     }else{
-     steps.append(Step());
+
+       // qDebug("aaf");
+     steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+     break;
     }
     row=stones[moveId].row;
     //
-    for(;row>=0;row--)
+    for(row--;row>=0;row--)
     if(getstoneId(row,col)==-1)
     {
-     steps.append(Step());
+     steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
     }
     else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
     {
      break;
     }else{
-     steps.append(Step());
+     steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+     break;
     }
     row=stones[moveId].row;
+   //////////////////////////////////////在行上蛮力探索//////////////////////////////////////////////////////////////
+    for(col++;col<9;col++)
+    if(getstoneId(row,col)==-1)
+    {
+     steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+    }
+    else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+    {
+     break;
+    }else{
+     steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+     break;
+    }
+    col=stones[moveId].col;
+    //
+    for(col--;col>=0;col--)
+    if(getstoneId(row,col)==-1)
+    {
+     steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+    }
+    else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+    {
+     break;
+    }else{
+     steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+     break;
+    }
+    //col=stones[moveId].col;
+  //qDebug("%d",steps.count());
+  return steps;
+}
 
 
 
@@ -99,4 +136,13 @@ QVector<Step> Board::chesteps(int moveId){
 
 
 
+
+void Board::move(int moveId, int rowto, int colto){
+
+    stones[moveId].row=rowto;
+    stones[moveId].col=colto;
+    if(getstoneId(rowto,colto)!=-1)
+       stones[getstoneId(rowto,colto)].dead=true;
+    postoids[stones[moveId].row][stones[moveId].col]=-1;
+    postoids[rowto][colto]=moveId;
 }

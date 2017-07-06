@@ -6,6 +6,7 @@ class Step
 {
 public:
     Step();
+    Step(int _moveId,int _killId,int _rowFrom,int _colFrom,int _rowTo,int _colTo);
     //移动棋子的标记
     int moveId;
     //杀死棋子的标记

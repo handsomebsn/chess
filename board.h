@@ -22,6 +22,8 @@ public:
     QVector<Step> jiangsteps(int moveId);
     QVector<Step> paoteps(int moveId);
     QVector<Step> bingteps(int moveId);
+    ///////////////////////////////////
+     void move(int moveId,int rowto,int colto);
 signals:
 
 public slots:
