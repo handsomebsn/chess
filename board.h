@@ -10,6 +10,12 @@ class Board : public QWidget
 {
     Q_OBJECT
 private:
+   inline int getstoneId(int row,int col){
+           if(row<0||row>9||col<0||col>8)
+               qDebug("......%d %d......",row,col);
+        return postoids[row][col];
+        }
+
     Stone stones[32];
     int postoids[10][9];//由棋盘位置返回此处的棋子id（stones数组下标）值，便于快速找到
     //
@@ -20,7 +26,7 @@ public:
     inline void chesteps(int moveId,QVector<Step> &steps);
     QVector<Step> masteps(int moveId);
     QVector<Step> xiangsteps(int moveId);
-    QVector<Step> shiteps(int moveId);
+    QVector<Step> shisteps(int moveId);
     QVector<Step> jiangsteps(int moveId);
     QVector<Step> paosteps(int moveId);
     void paosteps(int moveId,QVector<Step> &steps);
@@ -29,6 +35,7 @@ public:
      void move(int moveId,int rowto,int colto);
      //
      bool canmove(int moveId,int rowto,int colto);
+
 signals:
 
 public slots:
