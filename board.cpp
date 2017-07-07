@@ -197,26 +197,52 @@ QVector<Step> Board::jiangsteps(int moveId){
     QVector<Step> steps;
     int row=stones[moveId].row;
     int col=stones[moveId].col;
-    qDebug("aaa");
-    if(row-1>=0&&getstoneId(row-1,col)==-1)
+    int rmin=0;
+    int rmax=9;
+    //qDebug("aaa");
+    if(moveId<16)
+          rmax=2;
+        else
+         rmin=7;
+
+    if(row-1>=rmin&&getstoneId(row-1,col)==-1)
               steps.append(Step(moveId,getstoneId(row-1,col),stones[moveId].row,stones[moveId].col,row-1,col));
-        else if(row-1>=0&&decolor(stones[moveId].color,stones[getstoneId(row+1,col)].color))
+        else if(row-1>=rmin&&decolor(stones[moveId].color,stones[getstoneId(row+1,col)].color))
               steps.append(Step(moveId,getstoneId(row-1,col),stones[moveId].row,stones[moveId].col,row-1,col));
-    if(row+1<10&&getstoneId(row+1,col)==-1)
+    if(row+1<=rmax&&getstoneId(row+1,col)==-1)
               steps.append(Step(moveId,getstoneId(row+1,col),stones[moveId].row,stones[moveId].col,row+1,col));
-        else if(row+1<10&&decolor(stones[moveId].color,stones[getstoneId(row+1,col)].color))
+        else if(row+1<=rmax&&decolor(stones[moveId].color,stones[getstoneId(row+1,col)].color))
               steps.append(Step(moveId,getstoneId(row+1,col),stones[moveId].row,stones[moveId].col,row+1,col));
    //////
-    if(col+1<9&&getstoneId(row,col+1)==-1)
+    if(col+1<=5&&getstoneId(row,col+1)==-1)
               steps.append(Step(moveId,getstoneId(row,col+1),stones[moveId].row,stones[moveId].col,row,col+1));
-        else if(col+1<9&&col+1<9&&decolor(stones[moveId].color,stones[getstoneId(row,col+1)].color))
+        else if(col+1<=5&&col+1<9&&decolor(stones[moveId].color,stones[getstoneId(row,col+1)].color))
               steps.append(Step(moveId,getstoneId(row,col+1),stones[moveId].row,stones[moveId].col,row,col+1));
    //
-    if(col-1>=0&&getstoneId(row,col-1)==-1)
+    if(col-1>=3&&getstoneId(row,col-1)==-1)
               steps.append(Step(moveId,getstoneId(row,col-1),stones[moveId].row,stones[moveId].col,row,col-1));
-        else if(col-1>=0&&decolor(stones[moveId].color,stones[getstoneId(row,col+1)].color))
+        else if(col-1>=3&&decolor(stones[moveId].color,stones[getstoneId(row,col+1)].color))
               steps.append(Step(moveId,getstoneId(row,col-1),stones[moveId].row,stones[moveId].col,row,col-1));
     ;
+
+    //////////////////////////////////老爷喝酒///////////////////////////////////////////////////////
+    if(moveId<16)
+    for(row++;row<10;row++){
+       if(getstoneId(row,col)==-1)
+           continue;
+       else if(stones[getstoneId(row,col)].type!=JIANG)
+           break;
+       else
+       steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+    }else
+        for(row--;row>=0;row--){
+           if(getstoneId(row,col)==-1)
+               continue;
+           else if(stones[getstoneId(row,col)].type!=JIANG)
+               break;
+           else
+           steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+        }
     return steps;
 }
 
