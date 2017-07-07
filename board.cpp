@@ -69,22 +69,23 @@ QVector<Step> Board::chesteps(int moveId){
     int row=stones[moveId].row;
     int col=stones[moveId].col;
      /////////////////////////////在列上蛮力探索///////////////////////////////////////
+    //列的下方进行探索
     for(row++;row<10;row++)
-    if(getstoneId(row,col)==-1)
+    if(getstoneId(row,col)==-1)//如果探索位置没有任何棋子
     {
-     steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+     steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));//将走法插入到走法数组中
     }
-    else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+    else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))//探索位置有子 和待走子同一种颜色
     {
 
-     break;
-    }else{
+     break;//此方向上停止探索
+    }else{//探索位置有子 和待走子不同颜色
 
-     steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
-     break;
+     steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));//将走法插入到走法数组中
+     break;//此方向上停止探索
     }
     row=stones[moveId].row;
-    //
+    //列的上方进行探索
     for(row--;row>=0;row--)
     if(getstoneId(row,col)==-1)
     {
@@ -228,18 +229,18 @@ QVector<Step> Board::paosteps(int moveId){
     //qDebug("%d %d %d",row,col,getstoneId(row,col));
      /////////////////////////////在列上蛮力探索///////////////////////////////////////
     for(row++;row<10;row++)
-      if(numinline==0){
-           if(getstoneId(row,col)==-1)
+      if(numinline==0){//中间隔子为0个
+           if(getstoneId(row,col)==-1)//无子
                  steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
                else
                   numinline++;
 
-      }else{
-              if(getstoneId(row,col)==-1)
-                   continue;
-              else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+      }else{//中间隔子为1个
+              if(getstoneId(row,col)==-1)//无子
+                   continue;//次位置忽略，继续下一位置探索
+              else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))//有子切相同颜色
                       break;
-              else
+              else//无子且不同颜色
                  {steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
                   break;
                  }
