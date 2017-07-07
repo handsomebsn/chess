@@ -571,6 +571,8 @@ if(moveid==-1){
   row=(event->y()-Stone::offy+Stone::jiange/2)/Stone::jiange;
  col=(event->x()-Stone::offx+Stone::jiange/2)/Stone::jiange;
 //
+ if(row<0||row>9||col<0||col>8)
+ {qDebug("%d...... %d when select moveid",row,col);return;}
  qDebug("frow %d %d",row,col);
  moveid=getstoneId(row,col);
  if(moveid!=-1)
