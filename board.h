@@ -25,16 +25,25 @@ public:
     QVector<Step> chesteps(int moveId);
     inline void chesteps(int moveId,QVector<Step> &steps);
     QVector<Step> masteps(int moveId);
+    inline void masteps(int moveId,QVector<Step> &steps);
     QVector<Step> xiangsteps(int moveId);
+    inline void xiangsteps(int moveId,QVector<Step> &steps);
     QVector<Step> shisteps(int moveId);
+    inline void shisteps(int moveId,QVector<Step> &steps);
     QVector<Step> jiangsteps(int moveId);
+    inline void jiangsteps(int moveId,QVector<Step> &steps);
     QVector<Step> paosteps(int moveId);
-    void paosteps(int moveId,QVector<Step> &steps);
+    inline void paosteps(int moveId,QVector<Step> &steps);
     QVector<Step> bingsteps(int moveId);
+    inline void bingsteps(int moveId,QVector<Step> &steps);
     ///////////////////////////////////
      void move(int moveId,int rowto,int colto);
-     //
+
      bool canmove(int moveId,int rowto,int colto);
+     //////////
+     void getAllsetps(QVector<Step> &steps,bool player=false);
+     void move(const Step &step);
+     void ummove(const Step &step);
 
 signals:
 
