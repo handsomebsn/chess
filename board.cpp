@@ -6,7 +6,8 @@
 #define samecolor(c1,c2) c1==c2
 #define decolor(c1,c2) c1!=c2
 Board::Board(QWidget *parent) : QWidget(parent),painter(this)
-{
+{  _level=5;
+    computreture=false;
     bool computercolor=false;
     stones[0].init(CHE,0,0,computercolor);
     stones[1].init(MA,0,1,computercolor);
@@ -64,6 +65,9 @@ void Board::paintEvent(QPaintEvent *event){
     for(int i=0;i<32;i++)
         stones[i].display(painter);
     painter.end();
+
+
+
 }
 
 
@@ -896,6 +900,7 @@ return steps.contains(Step(moveId,getstoneId(rowto,colto),stones[moveId].row,sto
 
 
 void Board::move(int moveId, int rowto, int colto){
+    qDebug("move %d ",moveId);
     postoids[stones[moveId].row][stones[moveId].col]=-1;
     stones[moveId].row=rowto;
     stones[moveId].col=colto;
@@ -903,9 +908,17 @@ void Board::move(int moveId, int rowto, int colto){
        stones[getstoneId(rowto,colto)].dead=true;
 
     postoids[rowto][colto]=moveId;
+    if(computreture)
+        computreture=false;
+    else
+        computreture=true;
+
+
 }
 
 void Board::mousePressEvent(QMouseEvent *event){
+if(computreture)
+    return;
 
 //qDebug("haha");
     static int moveid=-1;
@@ -921,6 +934,7 @@ if(moveid==-1){
  moveid=getstoneId(row,col);
  if(moveid!=-1)
 stones[moveid].gaoliang(true);
+ qDebug("moveid %d ",moveid);
 }else{
 
     row=(event->y()-Stone::offy+Stone::jiange/2)/Stone::jiange;
@@ -946,15 +960,15 @@ stones[moveid].gaoliang(true);
 update();
 }
 
-void Board::getAllsetps(QVector<Step> &steps, bool player){
-int min=0,max=31;
+void Board::getAllsteps(QVector<Step> &steps, bool player){
+int min=0,max=32;
 if(player)
-   max=16;
-else
     min=16;
+else
+   max=16;
 for(int moveId=min;moveId<max;moveId++)
   {
-
+    if(stones[moveId].dead)continue;//have changed it for delete bug
     switch (stones[moveId].type) {
     case CHE:
         chesteps(moveId,steps);
@@ -1004,3 +1018,104 @@ void Board::unmove(const Step &step){
 
 
 }
+
+
+int Board::score()
+{
+    // enum TYPE{CHE, MA, PAO, BING, JIANG, SHI, XIANG};
+    static int s[] = {1000, 499, 501, 200, 15000, 100, 100};
+    int scorecomputre = 0;
+    int scoreplayer = 0;
+
+    for(int i = 0; i < 16; ++i)
+    {
+        if(stones[i].dead) continue;
+        scorecomputre += s[stones[i].type];
+    }
+    for(int i = 16; i < 32; ++i)
+    {
+        if(stones[i].dead) continue;
+        scoreplayer += s[stones[i].type];
+    }
+    return scorecomputre- scoreplayer;
+}
+
+int Board::getMinScore(int level, int curMin)
+{
+    if(level == 0)
+    {
+        return score();
+    }
+    if(stones[4].dead||stones[20].dead)
+    return score();
+    QVector<Step> steps;
+    getAllsteps(steps,true);
+    int minInAllMaxScore = 300000;
+    for(int i=0;i<steps.count();i++)
+    {
+        move(steps.at(i));
+        int maxScore = getMaxScore(level - 1, minInAllMaxScore);
+        unmove(steps.at(i));
+
+        if(maxScore <= curMin)
+        {
+        qDebug("..............................");
+            return maxScore;
+        }
+
+        if(maxScore < minInAllMaxScore)
+        {
+            minInAllMaxScore = maxScore;
+        }
+    }
+    return minInAllMaxScore;
+}
+
+int Board::getMaxScore(int level, int curMax)
+{
+    if(level == 0)
+        return score();
+    if(stones[4].dead||stones[20].dead)
+    return score();
+    QVector<Step> steps;
+    getAllsteps(steps,false);
+    int maxInAllMinScore = -300000;
+    for(int i=0;i<steps.count();i++)
+    {
+        move(steps.at(i));
+        int minScore = getMinScore(level - 1, maxInAllMinScore);
+        unmove(steps.at(i));
+        if(minScore >= curMax)
+        {
+            return minScore;
+        }
+        if(minScore > maxInAllMinScore)
+        {
+            maxInAllMinScore = minScore;
+        }
+    }
+    return maxInAllMinScore;
+}
+Step Board::getcomputerbeststep(){
+    Step beststep;
+   QVector<Step> steps;
+    getAllsteps(steps,false);
+    qDebug("gong you %d zou fa",steps.count());
+      int maxInAllMinScore = -300000;
+
+      for(int i=0;i<steps.count();i++)
+      {
+          move(steps.at(i));
+          int minScore = getMinScore(_level, maxInAllMinScore);
+           //qDebug("jumianfenshu %d",minScore);
+          unmove(steps.at(i));
+          if(minScore > maxInAllMinScore)
+          {
+              maxInAllMinScore = minScore;
+              beststep=steps.at(i);
+          }
+      }
+
+return beststep;
+}
+

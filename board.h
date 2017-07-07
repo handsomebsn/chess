@@ -20,6 +20,8 @@ private:
     int postoids[10][9];//由棋盘位置返回此处的棋子id（stones数组下标）值，便于快速找到
     //
     QPainter painter;
+    int _level;
+    bool computreture;
 public:
     explicit Board(QWidget *parent = 0);
     QVector<Step> chesteps(int moveId);
@@ -40,16 +42,27 @@ public:
      void move(int moveId,int rowto,int colto);
 
      bool canmove(int moveId,int rowto,int colto);
-     //////////
-     void getAllsetps(QVector<Step> &steps,bool player=false);
-     void move(const Step &step);
+     ////////////////////////////////////////////////////
+     void getAllsteps(QVector<Step> &steps,bool player=false);
+      void move(const Step &step);
      void unmove(const Step &step);
-
+     Step getcomputerbeststep();
+     int score();
+protected:
+     inline int getMinScore(int level, int curMin);
+     inline int getMaxScore(int level, int curMax);
 signals:
 
 public slots:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event){
+
+        if(computreture)
+            { Step step=getcomputerbeststep();    move(step.moveId,step.rowTo,step.colTo); }
+          qDebug("fenshu %d",score());
+     update();
+    }
 };
 
 #endif // BOARD_H
