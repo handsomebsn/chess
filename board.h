@@ -17,13 +17,14 @@ private:
 public:
     explicit Board(QWidget *parent = 0);
     QVector<Step> chesteps(int moveId);
-    void chesteps(int moveId,QVector<Step> &steps);
+    inline void chesteps(int moveId,QVector<Step> &steps);
     QVector<Step> masteps(int moveId);
     QVector<Step> xiangsteps(int moveId);
     QVector<Step> shiteps(int moveId);
     QVector<Step> jiangsteps(int moveId);
     QVector<Step> paosteps(int moveId);
-    QVector<Step> bingteps(int moveId);
+    void paosteps(int moveId,QVector<Step> &steps);
+    QVector<Step> bingsteps(int moveId);
     ///////////////////////////////////
      void move(int moveId,int rowto,int colto);
      //

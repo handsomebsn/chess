@@ -130,7 +130,7 @@ QVector<Step> Board::chesteps(int moveId){
 }
 
 
-void Board::chesteps(int moveId, QVector<Step> &steps){
+inline void Board::chesteps(int moveId, QVector<Step> &steps){
     int row=stones[moveId].row;
     int col=stones[moveId].col;
     //qDebug("%d %d %d",row,col,getstoneId(row,col));
@@ -282,6 +282,151 @@ QVector<Step> Board::paosteps(int moveId){
 return steps;
 }
 
+
+
+void Board::paosteps(int moveId,QVector<Step> &steps){
+
+    int row=stones[moveId].row;
+    int col=stones[moveId].col;
+    int numinline=0;
+    //qDebug("%d %d %d",row,col,getstoneId(row,col));
+     /////////////////////////////在列上蛮力探索///////////////////////////////////////
+    for(row++;row<10;row++)
+      if(numinline==0){
+           if(getstoneId(row,col)==-1)
+                 steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+               else
+                  numinline++;
+
+      }else{
+              if(getstoneId(row,col)==-1)
+                   continue;
+              else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+                      break;
+              else
+                 {steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+                  break;
+                 }
+      }
+    row=stones[moveId].row;
+    numinline=0;
+    for(row--;row>=0;row--)
+      if(numinline==0){
+           if(getstoneId(row,col)==-1)
+                 steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+               else
+                  numinline++;
+
+      }else{
+              if(getstoneId(row,col)==-1)
+                   continue;
+              else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+                      break;
+              else
+                 {steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+                  break;
+                 }
+      }
+      row=stones[moveId].row;
+      numinline=0;
+      //////////////////////////////////////在行上蛮力探索//////////////////////////////////////////////////////////////
+      for(col++;col<9;col++)
+        if(numinline==0){
+             if(getstoneId(row,col)==-1)
+                   steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+                 else
+                    numinline++;
+
+        }else{
+                if(getstoneId(row,col)==-1)
+                     continue;
+                else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+                        break;
+                else
+                   {steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+                    break;
+                   }
+        }
+      col=stones[moveId].col;
+      numinline=0;
+      for(col--;col>=0;col--)
+        if(numinline==0){
+             if(getstoneId(row,col)==-1)
+                   steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row,col));
+                 else
+                    numinline++;
+
+        }else{
+                if(getstoneId(row,col)==-1)
+                     continue;
+                else if(samecolor(stones[moveId].color,stones[getstoneId(row,col)].color))
+                        break;
+                else
+                   {steps.append(Step(moveId,getstoneId(row,col),stones[moveId].row,stones[moveId].col,row,col));
+                    break;
+                   }
+        }
+      //col=stones[moveId].col;
+      //numinline=0;
+
+}
+
+QVector<Step> Board::bingsteps(int moveId){
+ QVector<Step> steps;
+ int row=stones[moveId].row;
+ int col=stones[moveId].col;
+ if(moveId<16){
+      if(row<5){
+
+          if(getstoneId(row+1,col)==-1)
+                    steps.append(Step(moveId,getstoneId(row+1,col),stones[moveId].row,stones[moveId].col,row+1,col));
+              else if(decolor(stones[moveId].color,stones[getstoneId(row+1,col)].color))
+                    steps.append(Step(moveId,getstoneId(row+1,col),stones[moveId].row,stones[moveId].col,row+1,col));
+
+      }else{
+          if(row+1<10&&getstoneId(row+1,col)==-1)
+                    steps.append(Step(moveId,getstoneId(row+1,col),stones[moveId].row,stones[moveId].col,row+1,col));
+              else if(decolor(stones[moveId].color,stones[getstoneId(row+1,col)].color))
+                    steps.append(Step(moveId,getstoneId(row+1,col),stones[moveId].row,stones[moveId].col,row+1,col));
+         //////
+          if(col+1<9&&getstoneId(row,col+1)==-1)
+                    steps.append(Step(moveId,getstoneId(row,col+1),stones[moveId].row,stones[moveId].col,row,col+1));
+              else if(col+1<9&&decolor(stones[moveId].color,stones[getstoneId(row,col+1)].color))
+                    steps.append(Step(moveId,getstoneId(row,col+1),stones[moveId].row,stones[moveId].col,row,col+1));
+         //
+          if(col-1>=0&&getstoneId(row,col-1)==-1)
+                    steps.append(Step(moveId,getstoneId(row,col-1),stones[moveId].row,stones[moveId].col,row,col-1));
+              else if(col-1>=0&&decolor(stones[moveId].color,stones[getstoneId(row,col+1)].color))
+                    steps.append(Step(moveId,getstoneId(row,col-1),stones[moveId].row,stones[moveId].col,row,col-1));
+      }
+ }else{
+     if(row>4){
+         if(getstoneId(row-1,col)==-1)
+                   steps.append(Step(moveId,getstoneId(row-1,col),stones[moveId].row,stones[moveId].col,row-1,col));
+             else if(decolor(stones[moveId].color,stones[getstoneId(row+1,col)].color))
+                   steps.append(Step(moveId,getstoneId(row-1,col),stones[moveId].row,stones[moveId].col,row-1,col));
+     }else{
+         if(row-1>=0&&getstoneId(row-1,col)==-1)
+                   steps.append(Step(moveId,getstoneId(row-1,col),stones[moveId].row,stones[moveId].col,row-1,col));
+             else if(decolor(stones[moveId].color,stones[getstoneId(row+1,col)].color))
+                   steps.append(Step(moveId,getstoneId(row-1,col),stones[moveId].row,stones[moveId].col,row-1,col));
+        //////
+         if(col+1<9&&getstoneId(row,col+1)==-1)
+                   steps.append(Step(moveId,getstoneId(row,col+1),stones[moveId].row,stones[moveId].col,row,col+1));
+             else if(col+1<9&&decolor(stones[moveId].color,stones[getstoneId(row,col+1)].color))
+                   steps.append(Step(moveId,getstoneId(row,col+1),stones[moveId].row,stones[moveId].col,row,col+1));
+        //
+         if(col-1>=0&&getstoneId(row,col-1)==-1)
+                   steps.append(Step(moveId,getstoneId(row,col-1),stones[moveId].row,stones[moveId].col,row,col-1));
+             else if(col-1>=0&&decolor(stones[moveId].color,stones[getstoneId(row,col+1)].color))
+                   steps.append(Step(moveId,getstoneId(row,col-1),stones[moveId].row,stones[moveId].col,row,col-1));
+
+     }
+ }
+
+return steps;
+}
+
 bool Board::canmove(int moveId, int rowto, int colto){
   if(moveId<0||moveId>31)
      return false;
@@ -293,6 +438,9 @@ bool Board::canmove(int moveId, int rowto, int colto){
        break;
    case PAO:
        steps=paosteps(moveId);
+       break;
+   case BING:
+       steps=bingsteps(moveId);
        break;
    default:
        break;
@@ -333,10 +481,11 @@ stones[moveid].gaoliang(true);
   //
    qDebug("to %d %d",row,col);
    killedid=getstoneId(row,col);
+   if(killedid>31)return;
    qDebug(" moveid  %d killedid %d",moveid,killedid);
    if(killedid!=-1&&samecolor(stones[killedid].color,stones[moveid].color))
     {stones[moveid].gaoliang(false);moveid=killedid;stones[moveid].gaoliang(true);update();return;}
-   qDebug("haha");
+   //qDebug("haha");
    if(canmove(moveid,row,col))
    {
   move(moveid,row,col);
