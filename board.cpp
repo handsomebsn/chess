@@ -197,6 +197,63 @@ inline void Board::chesteps(int moveId, QVector<Step> &steps){
     }
 }
 
+QVector<Step> Board::masteps(int moveId){
+    QVector<Step> steps;
+    int row=stones[moveId].row;
+    int col=stones[moveId].col;
+    if(row+2<10&&col+1<9&&getstoneId(row+1,col)==-1)
+    if(getstoneId(row+2,col+1)==-1)
+         steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row+2,col+1));
+     else if(decolor(stones[moveId].color,stones[getstoneId(row+2,col+1)].color))
+          steps.append(Step(moveId,getstoneId(row+2,col+1),stones[moveId].row,stones[moveId].col,row+2,col+1));
+    //
+    if(row-2>=0&&col-1>=0&&getstoneId(row-1,col)==-1)
+    if(getstoneId(row-2,col-1)==-1)
+         steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row-2,col-1));
+     else if(decolor(stones[moveId].color,stones[getstoneId(row-2,col-1)].color))
+          steps.append(Step(moveId,getstoneId(row-2,col-1),stones[moveId].row,stones[moveId].col,row-2,col-1));
+    //
+    if(row-2>=0&&col+1<9&&getstoneId(row-1,col)==-1)
+    if(getstoneId(row-2,col+1)==-1)
+         steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row-2,col+1));
+     else if(decolor(stones[moveId].color,stones[getstoneId(row-2,col+1)].color))
+          steps.append(Step(moveId,getstoneId(row-2,col+1),stones[moveId].row,stones[moveId].col,row-2,col+1));
+    //
+    if(row+2<10&&col-1>=0&&getstoneId(row+1,col)==-1)
+    if(getstoneId(row+2,col-1)==-1)
+        steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row+2,col-1));
+    else if(decolor(stones[moveId].color,stones[getstoneId(row+2,col-1)].color))
+         steps.append(Step(moveId,getstoneId(row+2,col-1),stones[moveId].row,stones[moveId].col,row+2,col-1));
+    ///////////////////////////////////////////////////////////////////////
+    if(row+1<10&&col+2<9&&getstoneId(row,col+1)==-1)
+    if(getstoneId(row+1,col+2)==-1)
+         steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row+1,col+2));
+     else if(decolor(stones[moveId].color,stones[getstoneId(row+1,col+2)].color))
+          steps.append(Step(moveId,getstoneId(row+1,col+2),stones[moveId].row,stones[moveId].col,row+1,col+2));
+    //
+    if(row-1>=0&&col-2>=0&&getstoneId(row,col-1)==-1)
+    if(getstoneId(row-1,col-2)==-1)
+         steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row-1,col-2));
+     else if(decolor(stones[moveId].color,stones[getstoneId(row-1,col-2)].color))
+          steps.append(Step(moveId,getstoneId(row-1,col-2),stones[moveId].row,stones[moveId].col,row-1,col-2));
+    //
+    if(row-1>=0&&col+2<9&&getstoneId(row,col+1)==-1)
+    if(getstoneId(row-1,col+2)==-1)
+         steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row-1,col+2));
+     else if(decolor(stones[moveId].color,stones[getstoneId(row-1,col+2)].color))
+          steps.append(Step(moveId,getstoneId(row-1,col+2),stones[moveId].row,stones[moveId].col,row-1,col+2));
+    //
+    if(row+1<10&&col-2>=0&&getstoneId(row,col-1)==-1)
+    if(getstoneId(row+1,col-2)==-1)
+        steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row+1,col-2));
+    else if(decolor(stones[moveId].color,stones[getstoneId(row+1,col-2)].color))
+         steps.append(Step(moveId,getstoneId(row+1,col-2),stones[moveId].row,stones[moveId].col,row+1,col-2));
+
+return steps;
+
+}
+
+
 
 QVector<Step> Board::xiangsteps(int moveId){
     QVector<Step> steps;
@@ -572,6 +629,9 @@ bool Board::canmove(int moveId, int rowto, int colto){
    switch (_type) {
    case CHE:
        steps=chesteps(moveId);
+       break;
+    case MA:
+       steps=masteps(moveId);
        break;
    case XIANG:
        steps=xiangsteps(moveId);
