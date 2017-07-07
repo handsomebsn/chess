@@ -197,6 +197,48 @@ inline void Board::chesteps(int moveId, QVector<Step> &steps){
     }
 }
 
+
+QVector<Step> Board::xiangsteps(int moveId){
+    QVector<Step> steps;
+    int row=stones[moveId].row;
+    int col=stones[moveId].col;
+    int rmin=0;
+    int rmax=9;
+    //qDebug("aaa");
+    if(moveId<16)
+          rmax=4;
+        else
+         rmin=5;
+    //
+   if(row+2<=rmax&&col+2<9&&getstoneId(row+1,col+1)==-1)
+    if(getstoneId(row+2,col+2)==-1)
+         steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row+2,col+2));
+     else if(decolor(stones[moveId].color,stones[getstoneId(row+2,col+2)].color))
+          steps.append(Step(moveId,getstoneId(row+2,col+2),stones[moveId].row,stones[moveId].col,row+2,col+2));
+   //
+   if(row-2>=rmin&&col-2>=0&&getstoneId(row-1,col-1)==-1)
+    if(getstoneId(row-2,col-2)==-1)
+         steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row-2,col-2));
+     else if(decolor(stones[moveId].color,stones[getstoneId(row-2,col-2)].color))
+          steps.append(Step(moveId,getstoneId(row-2,col-2),stones[moveId].row,stones[moveId].col,row-2,col-2));
+   //
+   if(row-2>=rmin&&col+2<9&&getstoneId(row-1,col+1)==-1)
+    if(getstoneId(row-2,col+2)==-1)
+         steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row-2,col+2));
+     else if(decolor(stones[moveId].color,stones[getstoneId(row-2,col+2)].color))
+          steps.append(Step(moveId,getstoneId(row-2,col+2),stones[moveId].row,stones[moveId].col,row-2,col+2));
+  //
+   if(row+2<=rmax&&col-2>=0&&getstoneId(row+1,col-1)==-1)
+   if(getstoneId(row+2,col-2)==-1)
+        steps.append(Step(moveId,-1,stones[moveId].row,stones[moveId].col,row+2,col-2));
+    else if(decolor(stones[moveId].color,stones[getstoneId(row+2,col-2)].color))
+         steps.append(Step(moveId,getstoneId(row+2,col-2),stones[moveId].row,stones[moveId].col,row+2,col-2));
+
+
+
+return steps;
+}
+
 QVector<Step> Board::shisteps(int moveId){
     QVector<Step> steps;
     int row=stones[moveId].row;
@@ -530,6 +572,9 @@ bool Board::canmove(int moveId, int rowto, int colto){
    switch (_type) {
    case CHE:
        steps=chesteps(moveId);
+       break;
+   case XIANG:
+       steps=xiangsteps(moveId);
        break;
    case SHI:
        steps=shisteps(moveId);
