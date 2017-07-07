@@ -983,3 +983,24 @@ for(int moveId=min;moveId<max;moveId++)
    }
 
 }
+void Board::move(const Step &step){
+    postoids[step.rowFrom][step.colFrom]=-1;
+    stones[step.moveId].row=step.rowTo;
+    stones[step.moveId].col=step.colTo;
+    if(step.killId!=-1)
+       stones[step.killId].dead=true;
+
+    postoids[step.rowTo][step.colTo]=step.moveId;
+
+}
+void Board::unmove(const Step &step){
+    postoids[step.rowTo][step.colTo]=step.killId;
+    stones[step.moveId].row=step.rowFrom;
+    stones[step.moveId].col=step.colFrom;
+    if(step.killId!=-1)
+       stones[step.killId].dead=false;
+
+    postoids[step.rowFrom][step.colFrom]=step.moveId;
+
+
+}

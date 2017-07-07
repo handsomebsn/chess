@@ -43,7 +43,7 @@ public:
      //////////
      void getAllsetps(QVector<Step> &steps,bool player=false);
      void move(const Step &step);
-     void ummove(const Step &step);
+     void unmove(const Step &step);
 
 signals:
 
