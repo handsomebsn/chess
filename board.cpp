@@ -6,7 +6,7 @@
 #define samecolor(c1,c2) c1==c2
 #define decolor(c1,c2) c1!=c2
 Board::Board(QWidget *parent) : QWidget(parent),painter(this)
-{  _level=5;
+{  _level=4;
     computreture=false;
     bool computercolor=false;
     stones[0].init(CHE,0,0,computercolor);
@@ -912,6 +912,20 @@ void Board::move(int moveId, int rowto, int colto){
         computreture=false;
     else
         computreture=true;
+    int num=0;
+    for(int i=0;i<32;i++){
+        if(stones[i].dead)
+        num++;
+    }
+    if(num<10)
+        _level=4;
+    else if(num<20)
+        _level=5;
+    else if(num<26)
+        _level=6;
+    else
+        _level=7;
+
 
 
 }
@@ -960,7 +974,7 @@ stones[moveid].gaoliang(true);
 update();
 }
 
-void Board::getAllsteps(QVector<Step> &steps, bool player){
+inline void Board::getAllsteps(QVector<Step> &steps, bool player){
 int min=0,max=32;
 if(player)
     min=16;
@@ -1046,14 +1060,20 @@ int Board::getMinScore(int level, int curMin)
     {
         return score();
     }
-    if(stones[4].dead||stones[20].dead)
-    return score();
+    //if(stones[4].dead||stones[20].dead)
+    //return score();
     QVector<Step> steps;
     getAllsteps(steps,true);
     int minInAllMaxScore = 300000;
     for(int i=0;i<steps.count();i++)
     {
         move(steps.at(i));
+        if(stones[4].dead){
+         unmove(steps.at(i));
+        return -10000;
+        }
+
+
         int maxScore = getMaxScore(level - 1, minInAllMaxScore);
         unmove(steps.at(i));
 
@@ -1075,14 +1095,18 @@ int Board::getMaxScore(int level, int curMax)
 {
     if(level == 0)
         return score();
-    if(stones[4].dead||stones[20].dead)
-    return score();
+    //if(stones[4].dead||stones[20].dead)
+    //return score();
     QVector<Step> steps;
     getAllsteps(steps,false);
     int maxInAllMinScore = -300000;
     for(int i=0;i<steps.count();i++)
     {
         move(steps.at(i));
+        if(stones[20].dead){
+         unmove(steps.at(i));
+        return 10000;
+        }
         int minScore = getMinScore(level - 1, maxInAllMinScore);
         unmove(steps.at(i));
         if(minScore >= curMax)

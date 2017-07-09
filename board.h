@@ -43,7 +43,7 @@ public:
 
      bool canmove(int moveId,int rowto,int colto);
      ////////////////////////////////////////////////////
-     void getAllsteps(QVector<Step> &steps,bool player=false);
+     inline void getAllsteps(QVector<Step> &steps,bool player=false);
       void move(const Step &step);
      void unmove(const Step &step);
      Step getcomputerbeststep();

@@ -1,18 +1,17 @@
 #include "board.h"
 #include <QApplication>
-
+#include<ctime>
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
   Board w;
+double start=clock();
 
   QVector<Step> steps;
-  w.getAllsteps(steps,true);
-  for(int i=0;i<steps.count();i++){
-  qDebug("%d %d %d",steps.at(i).moveId,steps.at(i).rowTo,steps.at(i).colTo);
-w.move(steps.at(i));
-w.unmove(steps.at(i));
-}
+
+
+double end=clock();
+qDebug("%f",end-start);
     w.show();
 
     return a.exec();
